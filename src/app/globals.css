@@ -1,0 +1,93 @@
+:root {
+  --mint: #1fb5a3; --mint-d: #0d7f72; --mint-bg: #e6f8f5; --bg: #f3fbf9;
+  --ink: #23404a; --sub: #5b727a; --line: #d5ebe7; --sun: #ffd25e;
+  --coral: #d9443d; --coral-bg: #fdecea;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif; line-height: 1.7; -webkit-text-size-adjust: 100%; }
+.wrap { max-width: 880px; margin: 0 auto; padding: 0 16px calc(64px + env(safe-area-inset-bottom)); }
+header { display: flex; align-items: center; gap: 10px; padding: 14px 0; }
+.logo { width: 40px; height: 40px; border-radius: 12px; background: var(--mint); display: grid; place-items: center; flex: none; }
+header h1 { font-size: 18px; margin: 0; font-weight: 900; flex: 1; }
+.clinic { font-size: 12px; background: #fff; border: 2px solid var(--line); border-radius: 999px; padding: 3px 12px; font-weight: 700; }
+.card { background: #fff; border-radius: 24px; box-shadow: 0 4px 0 var(--line); padding: 18px; margin: 14px 0; }
+.card > * + * { margin-top: 12px; }
+h2 { font-size: 16px; margin: 0; font-weight: 900; display: flex; align-items: center; gap: 8px; }
+h2 .n { background: var(--mint); color: #fff; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 14px; }
+.t { display: block; font-size: 13px; font-weight: 700; color: var(--sub); margin: 0 0 6px; }
+.small { font-size: 12px; color: var(--sub); }
+.center { text-align: center; }
+.seg { display: flex; gap: 8px; flex-wrap: wrap; }
+.seg button { border: 2px solid var(--line); background: #fff; color: var(--ink); border-radius: 999px; padding: 9px 16px; font: inherit; font-weight: 700; cursor: pointer; min-height: 44px; }
+.seg button[aria-pressed="true"] { background: var(--mint-d); border-color: var(--mint-d); color: #fff; }
+.seg.big button { flex: 1; min-width: 140px; border-radius: 20px; padding: 12px 14px; text-align: left; line-height: 1.4; }
+.seg.big small { display: block; font-weight: 500; font-size: 12px; opacity: 0.9; }
+input[type="text"], input[type="password"], textarea, .tagbox { width: 100%; border: 2px solid var(--line); border-radius: 14px; padding: 10px 12px; font: inherit; background: #fff; color: var(--ink); }
+textarea { resize: vertical; min-height: 64px; }
+input:focus, textarea:focus { outline: 3px solid var(--mint); outline-offset: 1px; }
+.go { display: block; width: 100%; border: 0; border-radius: 18px; background: var(--coral); color: #fff; font: inherit; font-weight: 900; font-size: 17px; padding: 15px; cursor: pointer; box-shadow: 0 5px 0 #a8322c; }
+.go:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 2px 0 #a8322c; }
+.go:disabled { opacity: 0.55; cursor: default; }
+.error { background: var(--coral-bg); color: #8f2520; border-radius: 14px; padding: 10px 12px; margin: 0; font-weight: 700; }
+.note-warn { background: #fff6dc; border: 2px solid var(--sun); border-radius: 14px; padding: 10px 12px; font-weight: 700; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+details summary { cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center; }
+.swatches { display: flex; gap: 10px; flex-wrap: wrap; }
+.sw { border: 3px solid var(--line); background: #fff; border-radius: 16px; padding: 6px 6px 4px; cursor: pointer; font: inherit; font-size: 12px; font-weight: 700; color: var(--ink); min-width: 78px; text-align: center; }
+.sw[aria-pressed="true"] { border-color: var(--ink); }
+.sw i { display: block; height: 44px; border-radius: 10px; margin-bottom: 4px; }
+.foot-note { font-size: 12px; color: var(--sub); text-align: center; margin-top: 20px; }
+/* 結果: 文章 */
+.post { border: 2px solid var(--line); border-radius: 18px; padding: 14px; margin-bottom: 12px; background: #fff; }
+.post > * + * { margin-top: 8px; }
+.post .head { display: flex; justify-content: space-between; align-items: center; font-weight: 900; font-size: 14px; }
+.post .body { font-size: 15px; }
+.tagbox { color: var(--mint-d); font-weight: 700; }
+.post .foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.copy { border: 2px solid var(--mint-d); background: #fff; color: var(--mint-d); border-radius: 12px; padding: 8px 14px; font: inherit; font-weight: 900; cursor: pointer; min-height: 44px; }
+.copy.done { background: var(--mint-d); color: #fff; }
+.scene { display: flex; gap: 8px; align-items: flex-start; }
+.scene .sn { flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--mint-bg); color: var(--mint-d); font-weight: 900; display: grid; place-items: center; margin-top: 8px; }
+.scene .sb { flex: 1; display: grid; gap: 6px; }
+.tools { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; justify-content: center; }
+.tools button { border: 2px solid var(--line); background: #fff; color: var(--ink); border-radius: 14px; padding: 9px 14px; font: inherit; font-weight: 700; cursor: pointer; min-height: 44px; }
+.tools .main { background: var(--mint-d); border-color: var(--mint-d); color: #fff; }
+.check { border-radius: 18px; padding: 12px 14px; margin: 12px 0 0; font-size: 14px; }
+.check.ok { background: var(--mint-bg); }
+.check.warn { background: var(--coral-bg); }
+.check ul { margin: 6px 0 0; padding-left: 20px; }
+mark { background: var(--sun); color: var(--ink); border-radius: 4px; padding: 0 2px; }
+/* ポスター(A4)。文字の大きさは、幅に合わせて決まる(cqw) */
+.poster-box { container-type: inline-size; max-width: 420px; margin: 0 auto; }
+.poster { --pm: #1fb5a3; --pd: #0d7f72; --pbg: #e6f8f5; --pl: #d5ebe7; aspect-ratio: 210 / 297; width: 100%; background: linear-gradient(180deg, var(--pbg) 0%, #fff 55%); border: 0.8cqw solid var(--pm); border-radius: 4cqw; padding: 5.5cqw 5.5cqw 4cqw; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.poster .badge { align-self: flex-start; background: var(--sun); color: #5a4300; font-weight: 900; font-size: 3.2cqw; border-radius: 999px; padding: 0.4cqw 3cqw; }
+.poster h3 { font-size: 7.6cqw; line-height: 1.25; margin: 2.4cqw 0 1cqw; color: var(--pd); font-weight: 900; white-space: pre-line; }
+.poster .catch { font-size: 3.8cqw; font-weight: 700; margin: 0 0 3cqw; }
+.poster ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 2cqw; }
+.poster li { background: #fff; border: 0.5cqw solid var(--pl); border-radius: 3.4cqw; padding: 2cqw 3cqw; font-size: 3.5cqw; display: flex; gap: 2cqw; align-items: baseline; }
+.poster li .pl { color: var(--pd); font-weight: 900; flex: none; }
+.poster .art { margin: auto; padding-top: 2cqw; text-align: center; color: var(--pm); }
+.poster .tooth { width: 22cqw; height: 22cqw; }
+.poster footer { display: block; border-top: 0.5cqw dashed var(--pl); padding: 2cqw 0 0; font-size: 2.8cqw; color: var(--sub); text-align: center; }
+.poster footer strong { display: block; color: var(--ink); font-size: 3.6cqw; }
+.poster footer .closing { margin: 0 0 1cqw; font-weight: 700; color: var(--pd); font-size: 3.2cqw; }
+.poster.d-sakura { --pm: #e7709b; --pd: #b2406b; --pbg: #fdeaf1; --pl: #f6d3e0; }
+.poster.d-sora { --pm: #4a95e0; --pd: #245f9e; --pbg: #e6f1fd; --pl: #cfe2f7; }
+.poster.d-sun { --pm: #f2a900; --pd: #8a5e00; --pbg: #fff4d1; --pl: #f7e2a5; }
+.poster.d-kirakira::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 15% 12%, #fff8 0 1.4cqw, transparent 1.6cqw), radial-gradient(circle at 85% 20%, #fff8 0 1cqw, transparent 1.2cqw), radial-gradient(circle at 75% 60%, #fff8 0 1.2cqw, transparent 1.4cqw); pointer-events: none; }
+[contenteditable]:hover, [contenteditable]:focus { outline: 2px dashed var(--mint); outline-offset: 3px; border-radius: 6px; }
+/* 印刷: ポスターだけを、A4いっぱいに */
+@page { size: A4; margin: 0; }
+@media print {
+  body { background: #fff; }
+  .no-print { display: none !important; }
+  .wrap { padding: 0; max-width: none; }
+  .card { box-shadow: none; padding: 0; margin: 0; border-radius: 0; }
+  .card > * { margin-top: 0 !important; }
+  html, body { height: auto; margin: 0; }
+  .poster-box { max-width: none; width: 210mm; margin: 0; }
+  .poster { height: 296mm; border-radius: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  [contenteditable] { outline: none !important; }
+}
+.ed { white-space: pre-wrap; }

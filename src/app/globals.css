@@ -60,16 +60,20 @@ details summary { cursor: pointer; font-weight: 700; min-height: 44px; display: 
 mark { background: var(--sun); color: var(--ink); border-radius: 4px; padding: 0 2px; }
 /* ポスター(A4)。文字の大きさは、幅に合わせて決まる(cqw) */
 .poster-box { container-type: inline-size; max-width: 420px; margin: 0 auto; }
-.poster { --pm: #1fb5a3; --pd: #0d7f72; --pbg: #e6f8f5; --pl: #d5ebe7; aspect-ratio: 210 / 297; width: 100%; background: linear-gradient(180deg, var(--pbg) 0%, #fff 55%); border: 0.8cqw solid var(--pm); border-radius: 4cqw; padding: 5.5cqw 5.5cqw 4cqw; display: flex; flex-direction: column; position: relative; overflow: hidden; }
-.poster .badge { align-self: flex-start; background: var(--sun); color: #5a4300; font-weight: 900; font-size: 3.2cqw; border-radius: 999px; padding: 0.4cqw 3cqw; }
-.poster h3 { font-size: 7.6cqw; line-height: 1.25; margin: 2.4cqw 0 1cqw; color: var(--pd); font-weight: 900; white-space: pre-line; }
-.poster .catch { font-size: 3.8cqw; font-weight: 700; margin: 0 0 3cqw; }
+.poster { --t2: calc(var(--ts, 1) * var(--fit, 1)); --s2: calc(var(--s, 1) * var(--fit, 1)); --k: var(--fit, 1); --pm: #1fb5a3; --pd: #0d7f72; --pbg: #e6f8f5; --pl: #d5ebe7; aspect-ratio: 210 / 297; width: 100%; background: linear-gradient(180deg, var(--pbg) 0%, #fff 55%); border: 0.8cqw solid var(--pm); border-radius: 4cqw; padding: 5.5cqw 5.5cqw 4cqw; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.poster .badge { align-self: flex-start; background: var(--sun); color: #5a4300; font-weight: 900; font-size: 3.2cqw; border-radius: var(--pill); padding: 0.4cqw 3cqw; }
+.poster h3 { font-size: calc(7.6cqw * var(--t2, 1)); line-height: 1.25; margin: 2.4cqw 0 1cqw; color: var(--pd); font-weight: 900; white-space: pre-line; }
+.poster .catch { font-size: calc(3.8cqw * var(--t2, 1)); font-weight: 700; margin: 0 0 3cqw; }
 .poster ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 2cqw; }
-.poster li { background: #fff; border: 0.5cqw solid var(--pl); border-radius: 3.4cqw; padding: 2cqw 3cqw; font-size: 3.5cqw; display: flex; gap: 2cqw; align-items: baseline; }
+.poster li { background: #fff; border: 0.5cqw solid var(--pl); border-radius: calc(var(--card) * 0.85); padding: 2cqw 3cqw; font-size: calc(3.5cqw * var(--t2, 1)); display: flex; gap: 2cqw; align-items: baseline; }
 .poster li .pl { color: var(--pd); font-weight: 900; flex: none; }
 .poster .art { margin: auto; padding-top: 2cqw; text-align: center; color: var(--pm); }
 .poster .tooth { width: 22cqw; height: 22cqw; }
-.poster footer { display: block; border-top: 0.5cqw dashed var(--pl); padding: 2cqw 0 0; font-size: 2.8cqw; color: var(--sub); text-align: center; }
+.poster footer { display: flex; align-items: center; justify-content: center; gap: 3cqw; border-top: 0.5cqw dashed var(--pl); padding: 2cqw 0 0; font-size: 2.8cqw; color: var(--sub); text-align: center; }
+.poster footer .ft { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 0.6cqw; }
+.poster .qr { flex: none; display: grid; justify-items: center; gap: 0.6cqw; font-size: 2.4cqw; font-weight: 900; line-height: 1.2; }
+.poster .qr svg { width: 15cqw; height: 15cqw; display: block; background: #fff; border-radius: 1cqw; }
+.poster .qr span { color: inherit; white-space: nowrap; }
 .poster footer strong { display: block; color: var(--ink); font-size: 3.6cqw; }
 .poster footer .closing { margin: 0 0 1cqw; font-weight: 700; color: var(--pd); font-size: 3.2cqw; }
 .poster.d-sakura { --pm: #e7709b; --pd: #b2406b; --pbg: #fdeaf1; --pl: #f6d3e0; }
@@ -91,3 +95,230 @@ mark { background: var(--sun); color: var(--ink); border-radius: 4px; padding: 0
   [contenteditable] { outline: none !important; }
 }
 .ed { white-space: pre-wrap; }
+/* 紺と水色(病院らしい、清潔なデザイン) */
+.poster.d-navy { --pm: #2a5cab; --pd: #1e3f7a; --pbg: #e4f1fb; --pl: #c6dff3; --pa: #6ecbd9; }
+.poster { --pa: var(--pm); }
+.poster.d-gold { --pm: #3a4658; --pd: #1c2430; --pbg: #f3eee0; --pl: #e0d3b0; --pa: #a67c2a; --pg: #fbf8f0; }
+.poster.d-salon { --pm: #9a6f66; --pd: #6b4a43; --pbg: #f6ece8; --pl: #e8d3cb; --pa: #c58f7d; --pg: #faf5f2; }
+.poster.d-natural { --pm: #5f8f6e; --pd: #3f6b4f; --pbg: #eaf3e6; --pl: #cfe3c9; --pa: #8fba7e; --pg: #f8f6ee; }
+.poster.d-pop { --pm: #f97316; --pd: #c2410c; --pbg: #fff4cc; --pl: #ffd966; --pa: #2563eb; --pg: #fffdf2; }
+.poster.d-sakura { --pg: #fff8fb; }
+.poster.d-navy { --pg: #f9fbfd; }
+/* テイスト: 文字の形(--ff-h, --ff-b)、見出しの太さ(--hw)、字間(--ls)、角の丸さ(--card, --tag, --pill)。フォントは、端末に入っているものを使う(端末で、見え方が少し変わる) */
+.poster { --ff-h: inherit; --hw: 900; --ls: 0; --card: 4cqw; --tag: 3cqw; --pill: 999px; }
+.poster h3, .poster .catch, .poster .sale, .poster footer strong { font-family: var(--ff-h); letter-spacing: var(--ls); }
+.poster h3 { font-weight: var(--hw); }
+.poster.t-luxury { --ff-h: "Hiragino Mincho ProN", "Yu Mincho", YuMincho, "Noto Serif JP", "Noto Serif CJK JP", "MS PMincho", serif; --hw: 700; --ls: 0.06em; --card: 0.6cqw; --tag: 0.4cqw; --pill: 0.6cqw; }
+.poster.t-salon { --ff-h: "Hiragino Mincho ProN", "Yu Mincho", YuMincho, "Noto Serif JP", "Noto Serif CJK JP", "MS PMincho", serif; --hw: 500; --ls: 0.1em; --card: 3cqw; --tag: 999px; --pill: 999px; }
+.poster.t-cute { --ff-h: "Hiragino Maru Gothic ProN", "Yu Gothic UI", "Meiryo UI", "Zen Maru Gothic", sans-serif; --hw: 900; --ls: 0.02em; --card: 5.4cqw; --tag: 999px; --pill: 999px; }
+.poster.t-natural { --ff-h: "Hiragino Maru Gothic ProN", "Yu Gothic UI", "Meiryo UI", "Zen Maru Gothic", sans-serif; --hw: 700; --ls: 0.04em; --card: 3.4cqw; --tag: 999px; --pill: 999px; }
+.poster.t-pop { --ff-h: "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif; --hw: 900; --ls: 0; --card: 2.4cqw; --tag: 1.2cqw; --pill: 1.6cqw; }
+.poster.t-cute { background-image: radial-gradient(circle at 50% 50%, var(--pl) 0.45cqw, transparent 0.55cqw); background-size: 5cqw 5cqw; }
+.poster.t-pop .cp-item, .poster.t-pop li { box-shadow: 0 0 0 0.5cqw var(--pd), 1.1cqw 1.1cqw 0 0.5cqw var(--pd); }
+.poster.t-luxury.cp footer, .poster.t-salon.cp footer { border-top: 0.6cqw solid var(--pa); }
+.poster.t-luxury .cp-item, .poster.t-salon .cp-item { box-shadow: inset 0 0 0 0.3cqw var(--pa); }
+/* キャンペーンのポスター(2つの型)。帯の色は --pd、やわらかい面は --pbg、矢印や飾りは --pa */
+.poster.cp { padding: 0; border: 0; gap: 0; background: var(--pg, #f9fbfd); }
+.poster.cp h3 { margin: 0; line-height: 1.22; }
+.poster.cp .catch { margin: 0; font-weight: 700; }
+.poster.cp .art { margin: 0; padding: 0; color: var(--pa); }
+.poster.cp footer { margin-top: auto; background: var(--pd); color: #fff; border: 0; padding: 3cqw 5cqw; text-align: center; }
+.poster.cp footer strong { color: #fff; font-size: 5cqw; }
+.poster.cp footer span { color: #e6eef8; font-size: 3.4cqw; }
+.poster.cp footer .closing { color: #fff; font-size: 3.4cqw; margin: 1cqw 0 0; order: 3; }
+.poster.cp footer .qr { color: #fff; }
+.poster[data-qr] footer strong { font-size: 4.4cqw; }
+.poster[data-qr].cp footer { padding: 2.4cqw 5cqw; }
+.poster.cp .cp-item .pr { display: contents; }
+.poster.cp .cp-item .nm { font-weight: 900; color: var(--pd); }
+.poster.cp .cp-item .reg { color: #3c4a5c; }
+.poster.cp .cp-item .arr { width: 7cqw; height: 7cqw; border-radius: 50%; background: var(--pa); color: #fff; display: grid; place-items: center; font-weight: 900; font-size: 4.6cqw; line-height: 1; }
+.poster.cp .cp-item .sale { color: #111c2b; font-weight: 900; }
+.poster.cp .per { display: block; font-weight: 900; line-height: 1.12; overflow-wrap: anywhere; }
+/* メニューの数で、大きさを変える(--s)。A4の高さに、収まるようにする */
+/* 期間バッジ型 */
+.poster.cp-badge .cp-top { padding: 6cqw 6cqw 1cqw; text-align: center; }
+.poster.cp-badge h3 { color: var(--pd); font-size: calc(8cqw * var(--t2, 1)); letter-spacing: 0.02em; }
+.poster.cp-badge .catch { color: var(--pm); font-size: calc(4cqw * var(--t2, 1)); margin-top: 2cqw; }
+.poster.cp-badge .cp-main { flex: 1; display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 3cqw; align-items: center; padding: 2cqw 5cqw 4cqw; min-height: 0; }
+.poster.cp-badge .cp-left { display: grid; justify-items: center; gap: 3cqw; min-width: 0; }
+.poster.cp-badge .cp-left .tooth { width: 18cqw; height: 18cqw; }
+.poster.cp-badge .cp-circle { width: 100%; aspect-ratio: 1; border-radius: 50%; background: var(--pd); color: #fff; display: grid; align-content: center; justify-items: center; gap: 1cqw; padding: 3cqw; text-align: center; min-width: 0; overflow-wrap: anywhere; }
+.poster.cp-badge .cp-circle .lab { font-size: 3cqw; opacity: 0.9; font-weight: 700; }
+.poster.cp-badge .cp-circle .cond { font-size: 3.6cqw; font-weight: 900; line-height: 1.3; }
+.poster.cp-badge .per.l { font-size: 6cqw; white-space: nowrap; } .poster.cp-badge .per.m { font-size: 4.4cqw; } .poster.cp-badge .per.s { font-size: 3.6cqw; }
+.poster.cp-badge .cp-menus { display: grid; gap: calc(3.6cqw * var(--s2, 1)); text-align: center; min-width: 0; }
+.poster.cp-badge .cp-item { display: grid; justify-items: center; gap: calc(1cqw * var(--s2, 1)); min-width: 0; }
+.poster.cp-badge .cp-item .nm { font-size: calc(3.8cqw * var(--s2, 1)); line-height: 1.3; overflow-wrap: anywhere; }
+.poster.cp-badge .cp-item .reg { font-size: calc(3.5cqw * var(--s2, 1)); }
+.poster.cp-badge .cp-item .arr { width: calc(5.6cqw * var(--s2, 1)); height: calc(5.6cqw * var(--s2, 1)); font-size: calc(3.8cqw * var(--s2, 1)); }
+.poster.cp-badge .cp-item .sale { font-size: calc(8cqw * var(--s2, 1)); line-height: 1.15; }
+/* カード型 */
+.poster.cp-cards .cp-hero { background: var(--pd); color: #fff; padding: 5.4cqw 6cqw 8cqw; border-radius: 0 0 50% 50% / 0 0 5.4cqw 5.4cqw; display: flex; gap: 3cqw; align-items: center; justify-content: space-between; }
+.poster.cp-cards .cp-hero-text { flex: 1; min-width: 0; }
+.poster.cp-cards h3 { color: #fff; font-size: calc(6cqw * var(--t2, 1)); }
+.poster.cp-cards .catch { color: #dbe9f8; font-size: calc(3.4cqw * var(--t2, 1)); margin-top: 1.8cqw; line-height: 1.45; }
+.poster.cp-cards .cp-hero .art .tooth { width: 16cqw; height: 16cqw; color: #fff; }
+.poster.cp-cards .cp-round { flex: none; width: 25cqw; aspect-ratio: 1; border-radius: 50%; background: #fff; color: var(--pd); display: grid; place-items: center; padding: 2cqw; text-align: center; }
+.poster.cp-cards .per.l { font-size: 4.2cqw; white-space: nowrap; } .poster.cp-cards .per.m { font-size: 3.8cqw; } .poster.cp-cards .per.s { font-size: 3cqw; }
+.poster.cp-cards .cp-points { list-style: none; margin: 0; padding: 2.6cqw 5cqw 0; display: grid; gap: 1.2cqw; }
+.poster.cp-cards .cp-points li { background: #fff; border: 0.5cqw solid var(--pl); border-radius: var(--pill); padding: 0.9cqw 3.6cqw; font-size: calc(3.3cqw * var(--t2, 1)); font-weight: 700; color: var(--pd); display: flex; gap: 2.4cqw; align-items: center; }
+.poster.cp-cards .cp-points .ck { flex: none; width: 4.6cqw; height: 4.6cqw; border-radius: 50%; background: var(--pm); color: #fff; display: grid; place-items: center; font-size: 3cqw; }
+.poster.cp-cards .cp-panel { flex: 1; margin: 2.6cqw 4cqw 3cqw; background: var(--pbg); border-radius: calc(var(--card) * 1.25); padding: 3cqw; display: grid; align-content: safe center; gap: 2.6cqw; min-height: 0; }
+.poster.cp-cards .cp-cards { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 2.6cqw; }
+.poster.cp-cards .cp-item { background: #fff; border-radius: var(--card); padding: calc(2.4cqw * var(--s2, 1)) 1.6cqw; display: grid; justify-items: center; align-content: start; gap: calc(1.4cqw * var(--s2, 1)); text-align: center; min-width: 0; }
+.poster.cp-cards .cp-item .nm { background: var(--pd); color: #fff; border-radius: var(--tag); padding: 0.7cqw 1.4cqw; font-size: calc(3.3cqw * var(--s2, 1)); line-height: 1.35; overflow-wrap: anywhere; }
+.poster.cp-cards .cp-item .reg { font-size: calc(3.1cqw * var(--s2, 1)); }
+.poster.cp-cards .cp-item .arr { width: calc(5.4cqw * var(--s2, 1)); height: calc(5.4cqw * var(--s2, 1)); font-size: calc(3.6cqw * var(--s2, 1)); }
+.poster.cp-cards .cp-item .sale { background: var(--pd); color: #fff; border-radius: var(--pill); padding: 0.6cqw 3cqw; font-size: calc(5.6cqw * var(--s2, 1)); line-height: 1.3; max-width: 100%; }
+.poster.cp-cards .cp-cond { margin: 0; text-align: center; font-weight: 900; color: var(--pd); background: #fff; border-radius: var(--pill); padding: 1.4cqw 4cqw; font-size: 3.8cqw; justify-self: center; max-width: 100%; overflow-wrap: anywhere; }
+.poster.cp .cp-item .sale.long { font-size: calc(4.4cqw * var(--s2, 1)); }
+.poster.cp-badge .cp-item .sale.long { font-size: calc(6cqw * var(--s2, 1)); }
+/* カード型は、メニューが多いと場所がせまいので、ポイントを減らす(3つ: なし、1〜2つ: 2つまで) */
+.poster.cp-cards[data-n="3"] .cp-points { display: none; }
+.poster.cp-cards:not([data-n="3"]) .cp-points li:nth-child(3) { display: none; }
+.poster.cp-cards[data-tight]:not([data-n="3"]) .cp-points li:nth-child(2) { display: none; }
+/* 入力欄 */
+fieldset.camp { border: 2px solid var(--line); border-radius: 18px; padding: 12px; margin: 0; display: grid; gap: 12px; }
+fieldset.camp > * + * { margin-top: 0; }
+fieldset.camp legend { padding: 0 6px; }
+.menu-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-bottom: 12px; border-bottom: 1px dashed var(--line); }
+.menu-row .full, .full { grid-column: 1 / -1; }
+.warn-line { color: #8f2520; font-weight: 700; margin: 0; }
+.link { border: 0; background: none; color: var(--sub); text-decoration: underline; font: inherit; font-size: 13px; cursor: pointer; min-height: 40px; justify-self: start; }
+.addrow { border: 2px dashed var(--mint-d); background: #fff; color: var(--mint-d); border-radius: 14px; padding: 10px; font: inherit; font-weight: 900; cursor: pointer; min-height: 44px; }
+@media (max-width: 560px) { .menu-row { grid-template-columns: 1fr; } }
+/* 医院の色・保存したキャンペーン */
+.colorrow { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.colorrow .t { flex: 1 1 100%; margin: 0; }
+input[type="color"] { width: 56px; height: 44px; border: 2px solid var(--line); border-radius: 12px; background: #fff; padding: 3px; cursor: pointer; }
+.saved { border-top: 1px dashed var(--line); padding-top: 12px; display: grid; gap: 8px; }
+.saved > * + * { margin-top: 0; }
+.saved .t { margin: 0; }
+.saverow { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.saverow .addrow:disabled { opacity: 0.5; cursor: default; }
+.saved-item { display: grid; grid-template-columns: 1fr auto auto auto; gap: 8px; align-items: center; border: 2px solid var(--line); border-radius: 14px; padding: 6px 10px; }
+.saved-item .sn { font-weight: 700; overflow-wrap: anywhere; }
+.mini { border: 2px solid var(--mint-d); background: #fff; color: var(--mint-d); border-radius: 10px; padding: 6px 12px; font: inherit; font-weight: 900; cursor: pointer; min-height: 40px; }
+.tools button:disabled { opacity: 0.6; cursor: default; }
+@media (max-width: 560px) { .saved-item { grid-template-columns: 1fr auto auto; } .saved-item .small { grid-column: 1 / -1; } .saverow { grid-template-columns: 1fr; } }
+
+/* テイスト選択・QR・チェック */
+.tastes { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+.taste { border: 2px solid var(--line); background: #fff; color: var(--ink); border-radius: 16px; padding: 8px; font: inherit; text-align: left; cursor: pointer; display: grid; gap: 4px; min-height: 44px; }
+.taste[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 0 0 2px var(--ink) inset; }
+.taste i { display: block; height: 28px; border-radius: 8px; }
+.taste b { font-size: 14px; }
+.taste small { font-size: 12px; color: var(--sub); line-height: 1.4; }
+fieldset.qrset { border: 2px solid var(--line); border-radius: 18px; padding: 12px; margin: 0; display: grid; gap: 10px; }
+fieldset.qrset > * + * { margin-top: 0; }
+fieldset.qrset legend { padding: 0 6px; }
+.chk { display: flex; gap: 10px; align-items: center; font-weight: 700; min-height: 44px; cursor: pointer; }
+.chk input { width: 22px; height: 22px; flex: none; }
+.proof { border-radius: 18px; padding: 12px 14px; margin: 12px 0 0; font-size: 14px; background: var(--mint-bg); }
+.proof.has-fix { background: var(--coral-bg); }
+.proof b { display: block; }
+.proof ul { margin: 6px 0 0; padding-left: 20px; }
+.proof li.fix { color: #8f2520; font-weight: 700; }
+.proof li.info { color: var(--ink); }
+.qrgate { border: 2px solid var(--sun); background: #fff6dc; border-radius: 18px; padding: 12px 14px; font-size: 14px; display: grid; gap: 8px; }
+.qrgate > * + * { margin-top: 0; }
+.qrgate .row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* 写真: ふつうのポスターと期間バッジ型は、絵の場所に入れる。カード型は、上の帯の背景にする */
+.poster .art.has-photo { flex: 1 1 0; min-height: 0; max-height: 46cqw; display: flex; margin: 2cqw 0 0; padding: 0; }
+.poster .art.has-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--card); display: block; }
+.poster.cp-badge .cp-left .art.has-photo { flex: none; width: 100%; height: 21cqw; max-height: none; margin: 0; }
+.poster.cp-cards[data-photo] .cp-hero { background-image: linear-gradient(rgba(10, 20, 40, 0.55), rgba(10, 20, 40, 0.55)), var(--photo); background-size: cover; background-position: center; }
+
+/* SNS用の画像(正方形 1:1・ストーリーズ 9:16)。文字は、幅に合わせて決まる(cqw)。入りきらないときは、JSが --fit で、文字を少しずつ小さくする */
+.poster.sns { aspect-ratio: 1 / 1; border: 0; border-radius: 0; padding: 0; gap: 0; background: var(--pg, #f9fbfd); }
+.poster.sns.sns-story { aspect-ratio: 9 / 16; }
+.poster.sns .sn-head { background: var(--pd); color: #fff; padding: 4.5cqw 6cqw 5.5cqw; border-radius: 0 0 5cqw 5cqw; text-align: center; flex: none; }
+.poster.sns[data-photo] .sn-head { background-image: linear-gradient(rgba(10, 20, 40, 0.55), rgba(10, 20, 40, 0.55)), var(--photo); background-size: cover; background-position: center; }
+.poster.sns .sn-badge { display: inline-block; background: var(--sun); color: #5a4300; font-weight: 900; font-size: calc(2.8cqw * var(--k)); border-radius: var(--pill); padding: 0.3cqw 2.6cqw; margin-bottom: 1.2cqw; max-width: 100%; overflow-wrap: anywhere; }
+.poster.sns h3 { margin: 0; color: #fff; line-height: 1.22; }
+.poster.sns h3.ts-l { font-size: calc(7.4cqw * var(--t2)); }
+.poster.sns h3.ts-m { font-size: calc(6cqw * var(--t2)); }
+.poster.sns h3.ts-s { font-size: calc(4.8cqw * var(--t2)); }
+.poster.sns .catch { margin: 1.4cqw 0 0; color: #e6eef8; font-size: calc(3cqw * var(--t2)); line-height: 1.4; font-weight: 700; }
+.poster.sns.sns-sq[data-cp] .catch { display: none; }
+.poster.sns .sn-body { flex: 1; min-height: 0; display: grid; align-content: safe center; gap: 2cqw; padding: 2.4cqw 5cqw; }
+.poster.sns .sn-points { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.4cqw; }
+.poster.sns .sn-points li { font-size: calc(3cqw * var(--t2)); padding: 1.2cqw 2.8cqw; line-height: 1.35; }
+.poster.sns .sn-period { display: flex; flex-wrap: wrap; gap: 0.4cqw 1.6cqw; align-items: baseline; justify-content: center; background: var(--pbg); color: var(--pd); border-radius: var(--pill); padding: 0.9cqw 3.6cqw; font-weight: 900; min-width: 0; justify-self: center; max-width: 100%; }
+.poster.sns .sn-period span { font-size: calc(2.6cqw * var(--k)); }
+.poster.sns .sn-period strong { overflow-wrap: anywhere; text-align: center; }
+.poster.sns .sn-period .pz-l { font-size: calc(4.8cqw * var(--t2)); } .poster.sns .sn-period .pz-m { font-size: calc(3.9cqw * var(--t2)); } .poster.sns .sn-period .pz-s { font-size: calc(3.2cqw * var(--t2)); }
+.poster.sns .sn-menus { display: grid; grid-template-columns: repeat(var(--n, 1), minmax(0, 1fr)); gap: 1.8cqw; }
+.poster.sns .cp-item { background: #fff; border: 0.4cqw solid var(--pl); border-radius: var(--card); padding: calc(1.6cqw * var(--s2)) 1.2cqw; display: grid; justify-items: center; align-content: start; gap: calc(0.9cqw * var(--s2)); text-align: center; min-width: 0; }
+.poster.sns .cp-item .nm { background: var(--pd); color: #fff; border-radius: var(--tag); padding: 0.4cqw 1.4cqw; font-size: calc(2.8cqw * var(--s2)); line-height: 1.35; overflow-wrap: anywhere; font-weight: 900; }
+.poster.sns .cp-item .pr { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: calc(0.6cqw * var(--s2)) calc(1.2cqw * var(--s2)); min-width: 0; }
+.poster.sns .cp-item .reg { font-size: calc(2.6cqw * var(--s2)); color: #3c4a5c; }
+.poster.sns .cp-item .arr { width: calc(3.8cqw * var(--s2)); height: calc(3.8cqw * var(--s2)); border-radius: 50%; background: var(--pa); color: #fff; display: grid; place-items: center; font-weight: 900; font-size: calc(2.6cqw * var(--s2)); line-height: 1; transform: rotate(-90deg); flex: none; }
+.poster.sns .cp-item .sale { color: #111c2b; font-weight: 900; font-size: calc(5.6cqw * var(--s2)); line-height: 1.2; max-width: 100%; overflow-wrap: anywhere; }
+.poster.sns .cp-item .sale.long { font-size: calc(3.8cqw * var(--s2)); }
+.poster.sns .sn-cond { margin: 0; justify-self: center; text-align: center; font-weight: 900; color: var(--pd); background: #fff; border: 0.4cqw solid var(--pl); border-radius: var(--pill); padding: 0.6cqw 3.6cqw; font-size: calc(2.8cqw * var(--k)); max-width: 100%; overflow-wrap: anywhere; }
+.poster.sns footer { flex: none; margin: 0 5cqw 4cqw; background: var(--pd); color: #fff; border: 0; border-radius: var(--card); padding: 1.6cqw 3.4cqw; text-align: center; }
+.poster.sns footer strong { color: #fff; font-size: calc(3.4cqw * var(--k)); }
+.poster.sns footer span { color: #e6eef8; font-size: calc(2.5cqw * var(--k)); }
+.poster.sns footer .closing { color: #fff; font-size: calc(2.5cqw * var(--k)); margin: 0.4cqw 0 0; order: 3; }
+.poster.sns footer .qr { color: #fff; font-size: calc(2cqw * var(--k)); }
+.poster.sns footer .qr svg { width: calc(10cqw * var(--k)); height: calc(10cqw * var(--k)); }
+.poster.sns[data-n="1"].sns-sq .cp-item { padding: calc(2.4cqw * var(--s2)) 3cqw; gap: calc(1.4cqw * var(--s2)); }
+.poster.sns.sns-sq[data-n="1"] .cp-item .nm { font-size: calc(3.4cqw * var(--s2)); }
+.poster.sns.sns-sq[data-n="1"] .cp-item .reg { font-size: calc(3cqw * var(--s2)); }
+.poster.sns.sns-sq[data-n="1"] .cp-item .sale { font-size: calc(8cqw * var(--s2)); }
+.poster.sns.sns-sq[data-n="1"] .cp-item .sale.long { font-size: calc(5cqw * var(--s2)); }
+/* ストーリーズ: 上下は、アプリの表示で隠れやすいので、あける。メニューは、1行ずつ縦にならべる */
+.poster.sns.sns-story .sn-head { padding: 22cqw 8cqw 7cqw; border-radius: 0 0 7cqw 7cqw; }
+.poster.sns.sns-story .sn-badge { font-size: calc(3.4cqw * var(--k)); margin-bottom: 2cqw; }
+.poster.sns.sns-story h3.ts-l { font-size: calc(9.6cqw * var(--t2)); }
+.poster.sns.sns-story h3.ts-m { font-size: calc(7.6cqw * var(--t2)); }
+.poster.sns.sns-story h3.ts-s { font-size: calc(6cqw * var(--t2)); }
+.poster.sns.sns-story .catch { font-size: calc(4cqw * var(--t2)); margin-top: 2.2cqw; }
+.poster.sns.sns-story .sn-body { gap: 3cqw; padding: 3.5cqw 7cqw; }
+.poster.sns.sns-story .sn-points { gap: 2.4cqw; }
+.poster.sns.sns-story .sn-points li { font-size: calc(4cqw * var(--t2)); padding: 2cqw 4cqw; }
+.poster.sns.sns-story .sn-menus { grid-template-columns: 1fr; gap: 2.6cqw; }
+.poster.sns.sns-story .cp-item { grid-template-columns: minmax(0, 1fr) auto; justify-items: stretch; align-items: center; text-align: left; padding: calc(2cqw * var(--s2)) 3cqw; gap: calc(2cqw * var(--s2)); }
+.poster.sns.sns-story .cp-item .nm { justify-self: start; font-size: calc(4cqw * var(--s2)); padding: 0.8cqw 2.2cqw; }
+.poster.sns.sns-story .cp-item .pr { justify-content: flex-end; }
+.poster.sns.sns-story .cp-item .reg { font-size: calc(3.4cqw * var(--s2)); }
+.poster.sns.sns-story .cp-item .arr { width: calc(5cqw * var(--s2)); height: calc(5cqw * var(--s2)); font-size: calc(3.4cqw * var(--s2)); }
+.poster.sns.sns-story .cp-item .sale { font-size: calc(7.6cqw * var(--s2)); }
+.poster.sns.sns-story .cp-item .sale.long { font-size: calc(5cqw * var(--s2)); }
+.poster.sns.sns-story[data-n="1"] .cp-item { grid-template-columns: 1fr; justify-items: center; text-align: center; padding: calc(4cqw * var(--s2)) 4cqw; gap: calc(2.6cqw * var(--s2)); }
+.poster.sns.sns-story[data-n="1"] .cp-item .nm { justify-self: center; font-size: calc(5cqw * var(--s2)); }
+.poster.sns.sns-story[data-n="1"] .cp-item .pr { justify-content: center; }
+.poster.sns.sns-story[data-n="1"] .cp-item .reg { font-size: calc(4cqw * var(--s2)); }
+.poster.sns.sns-story[data-n="1"] .cp-item .arr { width: calc(6.4cqw * var(--s2)); height: calc(6.4cqw * var(--s2)); font-size: calc(4.4cqw * var(--s2)); }
+.poster.sns.sns-story[data-n="1"] .cp-item .sale { font-size: calc(11cqw * var(--s2)); }
+.poster.sns.sns-story[data-n="1"] .cp-item .sale.long { font-size: calc(7cqw * var(--s2)); }
+.poster.sns.sns-story .sn-period { padding: 1.6cqw 5cqw; }
+.poster.sns.sns-story .sn-period span { font-size: calc(3.4cqw * var(--k)); }
+.poster.sns.sns-story .sn-period .pz-l { font-size: calc(6.4cqw * var(--t2)); } .poster.sns.sns-story .sn-period .pz-m { font-size: calc(5.2cqw * var(--t2)); } .poster.sns.sns-story .sn-period .pz-s { font-size: calc(4.2cqw * var(--t2)); }
+.poster.sns.sns-story .sn-cond { font-size: calc(3.8cqw * var(--k)); padding: 1cqw 5cqw; }
+.poster.sns.sns-story footer { margin: 0 7cqw 22cqw; padding: 2.6cqw 4.5cqw; }
+.poster.sns.sns-story footer strong { font-size: calc(4.4cqw * var(--k)); }
+.poster.sns.sns-story footer span, .poster.sns.sns-story footer .closing { font-size: calc(3.2cqw * var(--k)); }
+.poster.sns.sns-story footer .qr svg { width: calc(14cqw * var(--k)); height: calc(14cqw * var(--k)); }
+/* 画面の部品 */
+.sizetabs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 12px; }
+.sizetabs button { border: 2px solid var(--line); background: #fff; color: var(--ink); border-radius: 14px; padding: 6px 12px; font: inherit; cursor: pointer; min-height: 44px; text-align: left; line-height: 1.3; }
+.sizetabs button[aria-pressed="true"] { background: var(--mint-d); border-color: var(--mint-d); color: #fff; }
+.sizetabs b { display: block; font-size: 14px; }
+.sizetabs small { font-size: 11px; opacity: 0.9; }
+.sns-box { margin-top: 0; }
+fieldset.photoset { border: 2px solid var(--line); border-radius: 18px; padding: 12px; margin: 0; display: grid; gap: 10px; }
+fieldset.photoset > * + * { margin-top: 0; }
+fieldset.photoset legend { padding: 0 6px; }
+.photorow { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.photorow img { width: 84px; height: 84px; object-fit: cover; border-radius: 14px; border: 2px solid var(--line); }
+.photorow input[type="file"] { max-width: 100%; }
+.tplgroup { display: grid; gap: 6px; }
+.tplgroup > .t { margin: 0; }
+.tpl-note { background: var(--mint-bg); border-radius: 14px; padding: 10px 12px; font-weight: 700; margin: 0; }
+.sns-from { border-top: 2px dashed var(--line); padding-top: 14px; margin-top: 18px; display: grid; gap: 10px; }
+.sns-from > * + * { margin-top: 0; }
+.sns-from h3 { margin: 0; font-size: 15px; }

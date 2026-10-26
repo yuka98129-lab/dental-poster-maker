@@ -1,8 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 import { buildPrompt, buildTool, GenerateError, generateContent } from "./generate";
+import { NO_CAMPAIGN } from "./campaign";
 import type { GenerateRequest } from "./request";
 
-const base: GenerateRequest = { mode: "clinic", kind: "sns", theme: "kids", topic: "", audience: "parent", tone: "soft", memo: "", voice: "" };
+const base: GenerateRequest = { mode: "clinic", kind: "sns", theme: "kids", topic: "", audience: "parent", tone: "soft", memo: "", voice: "", campaign: NO_CAMPAIGN, basedOn: "" };
 const fake = (content: unknown[]) => {
   const create = vi.fn().mockResolvedValue({ content });
   return { client: { messages: { create } } as never, create };
@@ -31,6 +32,20 @@ describe("buildPrompt", () => {
     expect(buildPrompt({ ...base, mode: "self", theme: "work", audience: "junior" })).toContain("新人の歯科衛生士や学生に向けて");
     expect(buildPrompt(base)).toContain("広報担当");
     expect(buildPrompt({ ...base, mode: "self", theme: "work", audience: "junior" })).toContain("実際にあった出来事を作らない");
+  });
+  it("キャンペーンは、金額・期間・条件を <campaign> で渡し、変えないよう伝える。ほかのテーマでは出さない", () => {
+    const campaign = { items: [{ name: "オフィスホワイトニング", regular: "33000", sale: "15000" }, { name: "エアフロー追加", regular: "", sale: "3300" }], period: "10/31まで", condition: "平日限定" };
+    const p = buildPrompt({ ...base, kind: "poster", theme: "campaign", campaign });
+    expect(p).toContain("<campaign>\n- オフィスホワイトニング: 通常 33,000円 → 15,000円\n- エアフロー追加: 3,300円\n期間: 10/31まで\n条件: 平日限定\n</campaign>");
+    expect(p).toContain("変えない・足さない・計算しない");
+    expect(p).toContain("金額の数字を入れなくてよい");
+    expect(buildPrompt({ ...base, campaign })).not.toContain("<campaign>\n");
+  });
+  it("ポスターから作るときは、<poster> で渡し、内容をそろえて、数字を足さないよう伝える", () => {
+    const p = buildPrompt({ ...base, basedOn: "タイトル: 夏のお知らせ\n- 1: 仕上げみがき" });
+    expect(p).toContain("<poster>\nタイトル: 夏のお知らせ\n- 1: 仕上げみがき\n</poster>");
+    expect(p).toContain("足さない");
+    expect(buildPrompt(base)).not.toContain("<poster>\n");
   });
   it("メモ・口調がなければ、その枠は出さない", () => {
     const p = buildPrompt(base);

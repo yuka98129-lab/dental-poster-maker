@@ -1,12 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { checkText } from "../lib/ad-check";
+import type { Campaign } from "../lib/campaign";
 import type { Clinic } from "../lib/clinic";
-import type { DesignId } from "../lib/options";
+import type { DesignId, LayoutId, TasteId } from "../lib/options";
+import { proofread } from "../lib/proofread";
+import type { QrSettings } from "../lib/qr";
 import type { Post, Poster as PosterData, Script } from "../lib/parse";
+import { posterToPng, savePng } from "../lib/image";
+import { PNG_WIDTH, SIZES, type SizeId } from "../lib/sizes";
 import { Findings } from "./Findings";
 import { Poster } from "./Poster";
+import { qrFor } from "./PosterParts";
+import { SnsCard } from "./SnsCard";
+import { validItems } from "../lib/campaign";
 
 function CopyButton({ text, label = "コピー" }: { text: string; label?: string }) {
   const [done, setDone] = useState(false);
@@ -29,21 +37,159 @@ function CopyButton({ text, label = "コピー" }: { text: string; label?: strin
 const tagsToText = (tags: string[]) => tags.join(" ");
 const textToTags = (t: string) => t.split(/\s+/).filter(Boolean);
 
-export function PosterResult({ poster, design, clinic, onChange, onAgain }: { poster: PosterData; design: DesignId; clinic: Clinic; onChange: (p: PosterData) => void; onAgain: () => void }) {
-  const findings = checkText(poster.badge, poster.title, poster.catchcopy, ...poster.points.map((p) => p.text), clinic.closing);
+type PosterResultProps = {
+  poster: PosterData;
+  design: DesignId;
+  clinic: Clinic;
+  campaign?: Campaign;
+  proofCampaign?: Campaign;
+  layout?: LayoutId;
+  brand?: string;
+  taste?: TasteId;
+  qr?: QrSettings;
+  photo?: string | null;
+  ts?: number;
+  qrTested: boolean;
+  onQrTested: (v: boolean) => void;
+  onChange: (p: PosterData) => void;
+  onAgain: () => void;
+};
+
+export function PosterResult({ poster, design, clinic, campaign, proofCampaign, layout, brand, taste, qr, photo = null, ts = 1, qrTested, onQrTested, onChange, onAgain }: PosterResultProps) {
+  const [size, setSize] = useState<SizeId>("a4");
+  const campaignTexts = campaign ? [...campaign.items.map((i) => i.name), campaign.period, campaign.condition] : [];
+  const posterTexts = [poster.badge, poster.title, poster.catchcopy, ...poster.points.map((p) => p.text), clinic.closing, ...campaignTexts];
+  const findings = checkText(...posterTexts);
+  const issues = proofread({ clinic, campaign: proofCampaign ?? campaign, qr, texts: posterTexts });
+  const fixCount = issues.filter((i) => i.level === "fix").length;
+  const hasQr = Boolean(qrFor(qr));
+  const boxRef = useRef<HTMLDivElement>(null);
+  const [imgBusy, setImgBusy] = useState(false);
+  const [imgError, setImgError] = useState("");
+  const [pending, setPending] = useState<"print" | "image" | null>(null);
+  async function saveImage() {
+    const node = boxRef.current?.querySelector<HTMLElement>(".poster");
+    if (!node) return;
+    setImgBusy(true);
+    setImgError("");
+    try {
+      const d = new Date();
+      const stamp = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
+      await savePng(await posterToPng(node, PNG_WIDTH[size]), `poster-${stamp}${size === "a4" ? "" : `-${size}`}.png`);
+    } catch {
+      setImgError("画像にできませんでした。「印刷する」から、PDFに保存してください。");
+    } finally {
+      setImgBusy(false);
+    }
+  }
+  const run = (action: "print" | "image") => (action === "print" ? window.print() : void saveImage());
+  const sizeInfo = SIZES.find((x) => x.id === size) ?? SIZES[0];
+  /** QRコードがあるのに、読み取りテストがまだのときは、先に、お知らせを出す(続けることも、できる) */
+  const go = (action: "print" | "image") => {
+    if (hasQr && !qrTested) setPending(action);
+    else run(action);
+  };
   return (
     <div>
-      <Poster poster={poster} design={design} clinic={clinic} onChange={onChange} />
-      <p className="small center no-print">文字を押すと、その場で直せます。デザインは、上で選び直せます。</p>
+      <div className="sizetabs no-print" role="group" aria-label="画像の大きさ">
+        {SIZES.map((x) => (
+          <button type="button" key={x.id} aria-pressed={x.id === size} onClick={() => setSize(x.id)}>
+            <b>{x.label}</b>
+            <small>{x.sub}</small>
+          </button>
+        ))}
+      </div>
+      <div ref={boxRef}>
+        {size === "a4" ? (
+          <Poster poster={poster} design={design} clinic={clinic} campaign={campaign} layout={layout} brand={brand} taste={taste} qr={qr} photo={photo} ts={ts} onChange={onChange} />
+        ) : (
+          <SnsCard poster={poster} design={design} brand={brand ?? ""} taste={taste ?? "clean"} qr={qr} clinic={clinic} campaign={campaign && validItems(campaign).length > 0 ? campaign : undefined} photo={photo} ts={ts} ratio={size} />
+        )}
+      </div>
+      <p className="small center no-print">
+        {size !== "a4"
+          ? `${sizeInfo.label}用の画像です。文字・金額を直すときは、「A4ポスター」に戻って直します。`
+          : campaign
+            ? "タイトルとひとことは、押すと、その場で直せます。金額・期間は、上の入力欄で直します。"
+            : "文字を押すと、その場で直せます。デザインは、上で選び直せます。"}
+      </p>
+
       <div className="tools no-print">
-        <button type="button" className="main" onClick={() => window.print()}>
-          印刷する(A4)
+        {size === "a4" && (
+          <button type="button" className="main" onClick={() => go("print")}>
+            印刷する(A4)
+          </button>
+        )}
+        <button type="button" className={size === "a4" ? "" : "main"} onClick={() => go("image")} disabled={imgBusy}>
+          {imgBusy ? "画像にしています…" : `画像で保存(PNG${size === "a4" ? "" : `・${sizeInfo.label}`})`}
         </button>
         <button type="button" onClick={onAgain}>
           もう一度つくる
         </button>
       </div>
-      <p className="small center no-print">「印刷する」の画面で、送り先を「PDFに保存」にすると、ファイルとして保存できます。</p>
+      {pending && (
+        <div className="qrgate no-print" role="alert">
+          <b>QRコードの、読み取りテストが、まだです。</b>
+          <span>スマホのカメラで、上のQRコードを読み取って、ページが開くか、確かめてから、進むと安心です。</span>
+          <div className="row">
+            <button
+              type="button"
+              className="mini"
+              onClick={() => {
+                onQrTested(true);
+                const a = pending;
+                setPending(null);
+                run(a);
+              }}
+            >
+              読み取れた。続ける
+            </button>
+            <button
+              type="button"
+              className="link"
+              onClick={() => {
+                const a = pending;
+                setPending(null);
+                run(a);
+              }}
+            >
+              確認せずに続ける
+            </button>
+            <button type="button" className="link" onClick={() => setPending(null)}>
+              やめる
+            </button>
+          </div>
+        </div>
+      )}
+      {imgError && (
+        <p role="alert" className="error no-print">
+          {imgError}
+        </p>
+      )}
+      {size === "a4" && <p className="small center no-print">「印刷する」の画面で、送り先を「PDFに保存」にすると、ファイルとして保存できます。</p>}
+      <div className={`proof no-print${fixCount ? " has-fix" : ""}`} role="status">
+        <b>{fixCount ? `記載もれ・誤記のチェック: 直したほうがよいものが、${fixCount}つあります。` : "記載もれ・誤記のチェック: 直す必要のあるものは、見つかりませんでした。"}</b>
+        {issues.length > 0 && (
+          <ul>
+            {issues.map((i, k) => (
+              <li key={k} className={i.level}>
+                {i.level === "fix" ? "要確認: " : "お知らせ: "}
+                {i.text}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      {hasQr && (
+        <div className="qrgate no-print">
+          <b>印刷の前に: QRコードの読み取りテスト</b>
+          <span>スマホのカメラで、上のポスターのQRコードを読み取って、ページが開くか確かめてください。印刷したものでも、一度、試してください(小さくなったり、白黒印刷だったりすると、読み取れないことがあります)。</span>
+          <label className="chk">
+            <input type="checkbox" checked={qrTested} onChange={(e) => onQrTested(e.target.checked)} />
+            スマホで読み取って、ページが開きました
+          </label>
+        </div>
+      )}
       <div className="no-print">
         <Findings findings={findings} />
       </div>

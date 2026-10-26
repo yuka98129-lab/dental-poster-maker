@@ -28,7 +28,41 @@ describe("parseGenerateRequest", () => {
   });
 });
 
+const camp = { items: [{ name: "オフィスホワイトニング", regular: "33,000円", sale: "１５０００" }, { name: "", regular: "1", sale: "2" }, { name: "名前だけ", regular: "", sale: "" }], period: "10/31まで", condition: "平日限定" };
+describe("キャンペーンの受け取り", () => {
+  it("そろった行だけを、数字に整えて受け取る", () => {
+    const r = parseGenerateRequest({ ...ok, theme: "campaign", campaign: camp });
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.value.campaign.items).toEqual([{ name: "オフィスホワイトニング", regular: "33000", sale: "15000" }]);
+      expect(r.value.campaign.period).toBe("10/31まで");
+    }
+  });
+  it("メニューと金額が1つもそろわなければ断る", () => {
+    expect(parseGenerateRequest({ ...ok, theme: "campaign" }).ok).toBe(false);
+    expect(parseGenerateRequest({ ...ok, theme: "campaign", campaign: { items: [{ name: "x", sale: "" }] } }).ok).toBe(false);
+  });
+  it("ほかのテーマでは、キャンペーンの内容は使わない", () => {
+    const r = parseGenerateRequest({ ...ok, campaign: camp });
+    expect(r.ok && r.value.campaign.items).toEqual([]);
+  });
+  it("自分の発信では、キャンペーンのテーマは使えない", () => {
+    expect(parseGenerateRequest({ ...ok, mode: "self", kind: "sns", theme: "campaign", audience: "junior", campaign: camp }).ok).toBe(false);
+  });
+});
+
 import { themesFor } from "./options";
+describe("ポスターからSNS文章", () => {
+  it("SNSのときだけ basedOn を受け取り、上限で切る", () => {
+    const r = parseGenerateRequest({ ...ok, kind: "sns", basedOn: "あ".repeat(900) });
+    expect(r.ok && r.value.basedOn).toHaveLength(400);
+    const p = parseGenerateRequest({ ...ok, kind: "poster", basedOn: "x" });
+    expect(p.ok && p.value.basedOn).toBe("");
+    const none = parseGenerateRequest({ ...ok, kind: "sns" });
+    expect(none.ok && none.value.basedOn).toBe("");
+  });
+});
+
 describe("themesFor", () => {
   it("そのモード専用のテーマが先に並ぶ", () => {
     expect(themesFor("self")[0].id).toBe("work");

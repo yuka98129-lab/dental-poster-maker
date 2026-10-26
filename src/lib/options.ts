@@ -17,6 +17,7 @@ type Theme = { id: string; label: string; note: string; modes: readonly ModeId[]
 
 export const THEMES: readonly Theme[] = [
   { id: "recall", label: "定期検診のおすすめ", note: "定期的な検診とクリーニングを受けることを、すすめる", modes: ["clinic"] },
+  { id: "campaign", label: "キャンペーン・料金のお知らせ", note: "医院のキャンペーン(料金・期間の案内)を知らせる。金額・期間・条件は campaign に書かれたものだけを、そのまま使う", modes: ["clinic"] },
   { id: "kids", label: "子どもの仕上げみがき", note: "保護者向けに、子どもの仕上げみがきの大切さとコツを伝える", modes: ["clinic", "self"] },
   { id: "close", label: "休診のお知らせ", note: "休診の期間と、診療を再開する日を知らせる。日付は memo に書かれているものだけを使う", modes: ["clinic"], needsMemo: "休診の日付を、ここに書いてください(例: 12月29日〜1月3日、1月4日から診療)" },
   { id: "fluor", label: "フッ素のおはなし", note: "フッ素の、一般的なはたらきと使い方のポイントを、やさしく伝える", modes: ["clinic", "self"] },
@@ -45,15 +46,42 @@ export const TONES = [
 export type ToneId = (typeof TONES)[number]["id"];
 
 export const DESIGNS = [
+  { id: "navy", label: "紺と水色", from: "#e4f1fb", to: "#1e3f7a" },
+  { id: "gold", label: "紺と金", from: "#f3eee0", to: "#1c2430" },
+  { id: "salon", label: "ローズベージュ", from: "#f6ece8", to: "#6b4a43" },
+  { id: "natural", label: "もりの緑", from: "#eaf3e6", to: "#3f6b4f" },
+  { id: "pop", label: "オレンジ", from: "#fff4cc", to: "#c2410c" },
   { id: "mint", label: "ミント", from: "#e6f8f5", to: "#1fb5a3" },
   { id: "sakura", label: "さくら", from: "#fdeaf1", to: "#e7709b" },
   { id: "sora", label: "そら", from: "#e6f1fd", to: "#4a95e0" },
   { id: "sun", label: "たいよう", from: "#fff4d1", to: "#f2a900" },
   { id: "kirakira", label: "キラキラ", from: "#e6f8f5", to: "#1fb5a3" },
 ] as const;
-export type DesignId = (typeof DESIGNS)[number]["id"];
+/** "custom" は、医院の色を、自分で選んだデザイン */
+export type DesignId = (typeof DESIGNS)[number]["id"] | "custom";
 
-export const LIMITS = { memo: 300, topic: 100, voice: 100 } as const;
+/**
+ * デザインのテイスト。色・文字の形・角の丸さ・飾りを、セットにしたもの(ワンタップで、雰囲気が決まる)。
+ * design は、そのテイストの、初めの色。あとから、色だけ変えられる
+ */
+export const TASTES = [
+  { id: "clean", label: "清潔感", sub: "すっきり、明るい", design: "navy" },
+  { id: "luxury", label: "高級感", sub: "落ち着いた紺と金、明朝体", design: "gold" },
+  { id: "salon", label: "高級サロン風", sub: "上品なベージュ、細い線", design: "salon" },
+  { id: "cute", label: "可愛い", sub: "やわらかい、まるい形", design: "sakura" },
+  { id: "natural", label: "ナチュラル", sub: "やさしい緑と生なり色", design: "natural" },
+  { id: "pop", label: "ポップ", sub: "元気、太い文字", design: "pop" },
+] as const;
+export type TasteId = (typeof TASTES)[number]["id"];
+
+/** キャンペーンのポスターの「型」 */
+export const LAYOUTS = [
+  { id: "badge", label: "期間バッジ型", sub: "期間を大きなまるに、メニューを縦に" },
+  { id: "cards", label: "カード型", sub: "メニューをカードで横に並べる" },
+] as const;
+export type LayoutId = (typeof LAYOUTS)[number]["id"];
+
+export const LIMITS = { memo: 300, topic: 100, voice: 100, basedOn: 400 } as const;
 
 /** そのモードで使えるテーマ。そのモード専用のものを先に並べる(自分の発信なら、新人さん向けのテーマが先頭) */
 export const themesFor = (mode: ModeId) =>

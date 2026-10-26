@@ -1,3 +1,4 @@
+import { NO_CAMPAIGN, parseCampaign, validItems, type Campaign } from "./campaign";
 import { AUDIENCES, KINDS, LIMITS, MODES, THEMES, TONES, themesFor, type AudienceId, type KindId, type ModeId, type ThemeId, type ToneId } from "./options";
 
 export type GenerateRequest = {
@@ -9,6 +10,9 @@ export type GenerateRequest = {
   tone: ToneId;
   memo: string;
   voice: string;
+  campaign: Campaign;
+  /** ポスターから、SNSの文章をつくるとき、そのポスターの文章(同じ内容でそろえるため) */
+  basedOn: string;
 };
 
 type Parsed = { ok: true; value: GenerateRequest } | { ok: false; message: string };
@@ -31,8 +35,11 @@ export function parseGenerateRequest(body: unknown): Parsed {
   if (mode === "self" && kind === "poster") return { ok: false, message: "ポスターは、医院の投稿で使えます。" };
   const topic = text(body.topic, LIMITS.topic);
   if (theme === "free" && !topic) return { ok: false, message: "「自由に書く」のときは、テーマの内容を書いてください。" };
+  // キャンペーンの内容は、「キャンペーン」のテーマのときだけ使う。メニューと金額が、1つはそろっている必要がある
+  const campaign = theme === "campaign" ? parseCampaign(body.campaign) : NO_CAMPAIGN;
+  if (theme === "campaign" && validItems(campaign).length === 0) return { ok: false, message: "メニューの名前と、キャンペーンの金額を、1つ以上入れてください。" };
   return {
     ok: true,
-    value: { mode, kind, theme, topic, audience, tone, memo: text(body.memo, LIMITS.memo), voice: text(body.voice, LIMITS.voice) },
+    value: { mode, kind, theme, topic, audience, tone, memo: text(body.memo, LIMITS.memo), voice: text(body.voice, LIMITS.voice), campaign, basedOn: kind === "sns" ? text(body.basedOn, LIMITS.basedOn) : "" },
   };
 }

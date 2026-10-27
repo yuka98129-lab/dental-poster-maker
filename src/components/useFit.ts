@@ -13,7 +13,13 @@ function overflowing(root: HTMLElement): boolean {
   if (footer) {
     const top = footer.getBoundingClientRect().top;
     for (const it of Array.from(root.querySelectorAll<HTMLElement>(".cp-item"))) if (it.getBoundingClientRect().bottom > top - 2) return true;
+    // ふつうのポスター(型: ふつう・サイドバー・大見出し)。ポイントが下の帯に重なる・帯が下にはみ出す
+    for (const li of Array.from(root.querySelectorAll<HTMLElement>(".poster > ul li, .pl-body ul li, .pl-main ul li"))) if (li.getBoundingClientRect().bottom > top - 1) return true;
+    if (footer.getBoundingClientRect().bottom > root.getBoundingClientRect().bottom + 1) return true;
   }
+  // 大見出し型は、上の見出しの面が、ポスターの高さの4割を超えないようにする
+  const hero = root.querySelector<HTMLElement>(".pl-hero");
+  if (hero && hero.getBoundingClientRect().height > root.getBoundingClientRect().height * 0.42) return true;
   const photo = root.querySelector<HTMLElement>(".art.has-photo");
   if (photo && photo.getBoundingClientRect().height < root.getBoundingClientRect().width * 0.14) return true;
   return false;

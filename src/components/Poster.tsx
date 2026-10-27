@@ -4,40 +4,85 @@ import { useRef, type CSSProperties } from "react";
 import { validItems, type Campaign } from "../lib/campaign";
 import { brandVars } from "../lib/color";
 import type { Clinic } from "../lib/clinic";
-import type { DesignId, LayoutId, TasteId } from "../lib/options";
+import { campaignLayoutOf, infoLayoutOf, type DesignId, type LayoutId, type TasteId } from "../lib/options";
 import type { QrSettings } from "../lib/qr";
 import type { Poster as PosterData } from "../lib/parse";
 import { CampaignPoster } from "./CampaignPoster";
 import { Editable } from "./Editable";
-import { Art, PosterFooter, qrFor } from "./PosterParts";
+import { Art, PosterFooter, qrFor, ToothArt } from "./PosterParts";
 import { useFit } from "./useFit";
 
 type Props = { poster: PosterData; design: DesignId; clinic: Clinic; campaign?: Campaign; layout?: LayoutId; brand?: string; taste?: TasteId; qr?: QrSettings; photo?: string | null; ts?: number; onChange: (p: PosterData) => void };
 
 /** A4 のポスター。文字の大きさは、ポスターの幅に合わせて決まるので、印刷しても、画面と同じ見た目になる */
-export function Poster({ poster, design, clinic, campaign, layout = "badge", brand = "", taste = "clean", qr, photo = null, ts = 1, onChange }: Props) {
+export function Poster({ poster, design, clinic, campaign, layout = "std", brand = "", taste = "clean", qr, photo = null, ts = 1, onChange }: Props) {
   const ref = useRef<HTMLDivElement>(null);
-  useFit(ref, JSON.stringify([poster, clinic, ts, photo ? 1 : 0, qr, design, taste]));
-  if (campaign && validItems(campaign).length > 0) return <CampaignPoster poster={poster} design={design} layout={layout} brand={brand} taste={taste} qr={qr} photo={photo} ts={ts} clinic={clinic} campaign={campaign} onChange={onChange} />;
+  useFit(ref, JSON.stringify([poster, clinic, ts, photo ? 1 : 0, qr, design, taste, layout]));
+  if (campaign && validItems(campaign).length > 0) return <CampaignPoster poster={poster} design={design} layout={campaignLayoutOf(layout)} brand={brand} taste={taste} qr={qr} photo={photo} ts={ts} clinic={clinic} campaign={campaign} onChange={onChange} />;
   const set = (patch: Partial<PosterData>) => onChange({ ...poster, ...patch });
   const setPoint = (i: number, patch: Partial<PosterData["points"][number]>) =>
     set({ points: poster.points.map((p, j) => (j === i ? { ...p, ...patch } : p)) });
+  const pl = infoLayoutOf(layout);
+  const title = <Editable as="h3" value={poster.title} onChange={(v) => set({ title: v })} label="タイトル" />;
+  const catchcopy = poster.catchcopy ? <Editable as="p" className="catch" value={poster.catchcopy} onChange={(v) => set({ catchcopy: v })} label="ポスターのひとこと" /> : null;
+  const badge = poster.badge ? <Editable as="span" className="badge" value={poster.badge} onChange={(v) => set({ badge: v })} label="小さな見出し" /> : null;
+  const points = (
+    <ul>
+      {poster.points.map((p, i) => (
+        <li key={i}>
+          {pl !== "std" && (
+            <span className="no" aria-hidden="true">
+              {i + 1}
+            </span>
+          )}
+          <Editable as="span" className="pl" value={p.label} onChange={(v) => setPoint(i, { label: v })} label={`ポイント${i + 1}の見出し`} />
+          <Editable as="span" className="pt" value={p.text} onChange={(v) => setPoint(i, { text: v })} label={`ポイント${i + 1}の文`} />
+        </li>
+      ))}
+    </ul>
+  );
   return (
     <div className="poster-box print-area">
-      <div ref={ref} className={`poster d-${design} t-${taste}`} data-qr={qrFor(qr) ? "" : undefined} style={{ ...(design === "custom" ? brandVars(brand) : {}), "--ts": ts } as CSSProperties}>
-        {poster.badge && <Editable as="span" className="badge" value={poster.badge} onChange={(v) => set({ badge: v })} label="小さな見出し" />}
-        <Editable as="h3" value={poster.title} onChange={(v) => set({ title: v })} label="タイトル" />
-        {poster.catchcopy && <Editable as="p" className="catch" value={poster.catchcopy} onChange={(v) => set({ catchcopy: v })} label="ポスターのひとこと" />}
-        <ul>
-          {poster.points.map((p, i) => (
-            <li key={i}>
-              <Editable as="span" className="pl" value={p.label} onChange={(v) => setPoint(i, { label: v })} label={`ポイント${i + 1}の見出し`} />
-              <Editable as="span" className="pt" value={p.text} onChange={(v) => setPoint(i, { text: v })} label={`ポイント${i + 1}の文`} />
-            </li>
-          ))}
-        </ul>
-        <Art photo={photo} />
-        <PosterFooter clinic={clinic} qr={qr} />
+      <div ref={ref} className={`poster pl-${pl} d-${design} t-${taste}`} data-qr={qrFor(qr) ? "" : undefined} data-photo={photo ? "" : undefined} style={{ ...(design === "custom" ? brandVars(brand) : {}), "--ts": ts } as CSSProperties}>
+        {pl === "std" && (
+          <>
+            {badge}
+            {title}
+            {catchcopy}
+            {points}
+            <Art photo={photo} />
+            <PosterFooter clinic={clinic} qr={qr} />
+          </>
+        )}
+        {pl === "side" && (
+          <>
+            <div className="pl-band" aria-hidden="true">
+              <ToothArt />
+            </div>
+            <div className="pl-body">
+              {badge}
+              {title}
+              {catchcopy}
+              {points}
+              <Art photo={photo} />
+              <PosterFooter clinic={clinic} qr={qr} />
+            </div>
+          </>
+        )}
+        {pl === "sun" && (
+          <>
+            <div className="pl-hero">
+              {badge}
+              {title}
+              {catchcopy}
+            </div>
+            <div className="pl-main">
+              {points}
+              <Art photo={photo} />
+            </div>
+            <PosterFooter clinic={clinic} qr={qr} />
+          </>
+        )}
       </div>
     </div>
   );

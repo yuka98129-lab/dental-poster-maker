@@ -13,7 +13,10 @@ import {
   AUDIENCES,
   DESIGNS,
   KINDS,
-  LAYOUTS,
+  CAMPAIGN_LAYOUTS,
+  INFO_LAYOUTS,
+  campaignLayoutOf,
+  infoLayoutOf,
   TASTES,
   LIMITS,
   MODES,
@@ -489,7 +492,7 @@ function MakerInner() {
                 <span className="small">{brand}。白い文字が読めるように、明るい色は、少し濃くします。</span>
               </div>
             )}
-            {isCampaign && <Seg label="ポスターの型" value={layout} options={LAYOUTS} onPick={setLayout} />}
+            {isCampaign ? <Seg label="ポスターの型" value={campaignLayoutOf(layout)} options={CAMPAIGN_LAYOUTS} onPick={setLayout} /> : <Seg label="ポスターの型" value={infoLayoutOf(layout)} options={INFO_LAYOUTS} onPick={setLayout} />}
             <Seg label="文字の大きさ(ポスター・SNS用の画像)" value={textSize} options={TEXT_SIZES} onPick={setTextSize} />
           </div>
         )}

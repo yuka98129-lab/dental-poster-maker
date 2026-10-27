@@ -74,12 +74,24 @@ export const TASTES = [
 ] as const;
 export type TasteId = (typeof TASTES)[number]["id"];
 
-/** キャンペーンのポスターの「型」 */
+/**
+ * ポスターの「型」。for が campaign のものはキャンペーン(料金・期間)のポスター用、info のものは、それ以外のポスター用。
+ * どちらの型でも、文章はAIがつくった同じ内容を使うので、型を変えても、AIは呼び直さない。
+ */
 export const LAYOUTS = [
-  { id: "badge", label: "期間バッジ型", sub: "期間を大きなまるに、メニューを縦に" },
-  { id: "cards", label: "カード型", sub: "メニューをカードで横に並べる" },
+  { id: "badge", label: "期間バッジ型", sub: "期間を大きなまるに、メニューを縦に", for: "campaign" },
+  { id: "cards", label: "カード型", sub: "メニューをカードで横に並べる", for: "campaign" },
+  { id: "std", label: "ふつう型", sub: "見出しの下に、ポイントをカードで", for: "info" },
+  { id: "side", label: "サイドバー型", sub: "左に縦の帯、ポイントを番号つきで", for: "info" },
+  { id: "sun", label: "大見出し型", sub: "上に大きな見出しの面、ポイントを大きく", for: "info" },
 ] as const;
 export type LayoutId = (typeof LAYOUTS)[number]["id"];
+export type InfoLayoutId = Extract<(typeof LAYOUTS)[number], { for: "info" }>["id"];
+export const CAMPAIGN_LAYOUTS = LAYOUTS.filter((l) => l.for === "campaign");
+export const INFO_LAYOUTS = LAYOUTS.filter((l) => l.for === "info");
+/** いまの型が、その種類のポスターで使えなければ、その種類の初めの型にする */
+export const infoLayoutOf = (l: string): InfoLayoutId => (INFO_LAYOUTS.find((x) => x.id === l)?.id ?? "std") as InfoLayoutId;
+export const campaignLayoutOf = (l: string): "badge" | "cards" => (l === "cards" ? "cards" : "badge");
 
 export const LIMITS = { memo: 300, topic: 100, voice: 100, basedOn: 400 } as const;
 

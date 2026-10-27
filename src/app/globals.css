@@ -322,3 +322,37 @@ fieldset.photoset legend { padding: 0 6px; }
 .sns-from { border-top: 2px dashed var(--line); padding-top: 14px; margin-top: 18px; display: grid; gap: 10px; }
 .sns-from > * + * { margin-top: 0; }
 .sns-from h3 { margin: 0; font-size: 15px; }
+
+/* ===== 一般ポスター(キャンペーン以外)の型: side(サイドバー型) / sun(大見出し型) =====
+   std(ふつう型)は、いままでの見た目。文章は同じ内容で、並べ方だけが変わる */
+.poster .li-no, .poster .no { display: none; }
+.poster.pl-side .no, .poster.pl-sun .no { display: grid; flex: none; place-items: center; width: calc(5.4cqw * var(--k)); height: calc(5.4cqw * var(--k)); border-radius: 50%; background: var(--pd); color: #fff; font-weight: 900; font-size: calc(3.2cqw * var(--k)); line-height: 1; align-self: center; }
+
+.poster.pl-side { padding: 0; border: 0; flex-direction: row; background: var(--pg, #f9fbfd); }
+.poster.pl-side .pl-band { flex: none; width: 15cqw; background: var(--pd); color: #fff; display: grid; align-content: start; justify-items: center; padding-top: 7cqw; }
+.poster.pl-side .pl-band .tooth { width: 9cqw; height: 9cqw; color: #fff; }
+.poster.pl-side .pl-body { flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 6cqw 5.5cqw 0 5cqw; }
+.poster.pl-side h3 { margin: 2cqw 0 1.4cqw; font-size: calc(7cqw * var(--t2, 1)); }
+.poster.pl-side .catch { margin: 0 0 3.4cqw; font-size: calc(3.5cqw * var(--t2, 1)); color: var(--pm); }
+.poster.pl-side ul { gap: 1.8cqw; }
+.poster.pl-side li { align-items: center; padding: 1.8cqw 2.4cqw; font-size: calc(3.3cqw * var(--t2, 1)); gap: 1.8cqw; flex-wrap: wrap; }
+.poster.pl-side li .pl { flex: 1 1 60%; }
+.poster.pl-side li .pt { flex: 1 1 100%; padding-left: calc(7.2cqw * var(--k)); line-height: 1.5; }
+.poster.pl-side footer { margin-top: auto; padding: 2.4cqw 0 3.6cqw; }
+.poster.pl-side .art.has-photo { max-height: 34cqw; }
+
+.poster.pl-sun { padding: 0; border: 0; background: var(--pg, #f9fbfd); }
+.poster.pl-sun .pl-hero { flex: none; background: var(--pd); color: #fff; padding: 7cqw 6cqw 10cqw; text-align: center; border-radius: 0 0 50% 50% / 0 0 7cqw 7cqw; display: grid; justify-items: center; gap: 1.6cqw; }
+.poster.pl-sun .pl-hero .badge { align-self: auto; }
+.poster.pl-sun h3 { color: #fff; margin: 1cqw 0 0; font-size: calc(9.6cqw * var(--t2, 1)); line-height: 1.2; }
+.poster.pl-sun .catch { color: #dbe9f8; margin: 0; font-size: calc(3.6cqw * var(--t2, 1)); line-height: 1.5; }
+.poster.pl-sun .pl-main { flex: 1; min-height: 0; display: flex; flex-direction: column; padding: 4cqw 6cqw 0; }
+.poster.pl-sun ul { gap: 2.2cqw; }
+.poster.pl-sun li { align-items: center; padding: 2.2cqw 3cqw; font-size: calc(3.5cqw * var(--t2, 1)); }
+.poster.pl-sun li .pl { color: var(--pd); }
+.poster.pl-sun footer { margin: auto 6cqw 0; padding: 2.4cqw 0 3.6cqw; }
+.poster.pl-sun .art.has-photo { max-height: 30cqw; }
+.poster.pl-sun .pl-main .art:not(.has-photo) { flex: 1 1 0; min-height: 0; display: flex; align-items: center; justify-content: center; margin: 0; padding: 0; }
+.poster.pl-sun .pl-main .art:not(.has-photo) .tooth { height: 100%; width: auto; max-height: 22cqw; aspect-ratio: 1; }
+.poster.pl-side .pl-body > .art:not(.has-photo) { flex: 1 1 0; min-height: 0; display: flex; align-items: center; justify-content: center; margin: 0; padding: 0; }
+.poster.pl-side .pl-body > .art:not(.has-photo) .tooth { height: 100%; width: auto; max-height: 22cqw; aspect-ratio: 1; }
